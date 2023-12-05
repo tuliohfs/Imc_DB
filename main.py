@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Tk, Toplevel, Label, Text, Scrollbar, messagebox, Button
 import customtkinter
+from CTkMessagebox import CTkMessagebox
 import sqlite3
 
 def criar_tabela():
@@ -86,6 +87,7 @@ def calcular_imc():
         resultado_label.configure(text="Erro: Insira valores válidos para altura e peso.")
 
 def exibir_dados():
+    
     dados = buscar_dados()
     if dados:
         # Se houver dados, criar uma nova janela para exibir
@@ -116,17 +118,18 @@ def exibir_dados():
         # Iniciar o loop principal da nova interface gráfica
         nova_janela.mainloop()
     else:
-        messagebox.showinfo("Sem Dados", "Nenhum dado encontrado.")
+        CTkMessagebox(title="Sem Dados", message="Nenhum dado encontrado.", fg_color="#242424", bg_color="#242424", text_color="white", button_color="#263d76", title_color="white")
 
 def limpar_banco():
-    resposta = messagebox.askyesno("Limpar Banco de Dados", "Tem certeza que deseja limpar o banco de dados?")
+    msg = CTkMessagebox(title="Limpar Banco de Dados", message="Tem certeza que deseja limpar o banco de dados?", option_1="Sim", option_2="Não", icon="question", fg_color="#242424", bg_color="#242424", text_color="white", button_color="#263d76", title_color="white")
+    resposta = msg.get()
     if resposta:
         conexao = sqlite3.connect('imc_db.sqlite')
         cursor = conexao.cursor()
         cursor.execute('DELETE FROM imc')
         conexao.commit()
         conexao.close()
-        messagebox.showinfo("Limpeza Concluída", "Banco de dados limpo com sucesso.")
+        CTkMessagebox(title="Limpeza Concluída", message="Banco de dados limpo com sucesso.", fg_color="#242424", bg_color="#242424", text_color="white", button_color="#263d76", title_color="white")
 
 def limpar_resultado():
     resultado_label.configure(text="")
