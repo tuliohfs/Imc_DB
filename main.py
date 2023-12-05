@@ -87,7 +87,7 @@ def calcular_imc():
         resultado_label.configure(text="Erro: Insira valores válidos para altura e peso.")
 
 def exibir_dados():
-    
+    global nova_janela  # Torna a variável global
     dados = buscar_dados()
     if dados:
         # Se houver dados, criar uma nova janela para exibir
@@ -122,22 +122,24 @@ def exibir_dados():
 
 def limpar_banco():
     msg = CTkMessagebox(title="Limpar Banco de Dados", message="Tem certeza que deseja limpar o banco de dados?", option_1="Sim", option_2="Não", icon="question", fg_color="#242424", bg_color="#242424", text_color="white", button_color="#263d76", title_color="white")
+    
     resposta = msg.get()
-    if resposta:
+
+    # Comparar o valor retornado com o texto do botão "Sim"
+    if resposta == "Sim":
         conexao = sqlite3.connect('imc_db.sqlite')
         cursor = conexao.cursor()
         cursor.execute('DELETE FROM imc')
         conexao.commit()
         conexao.close()
         CTkMessagebox(title="Limpeza Concluída", message="Banco de dados limpo com sucesso.", fg_color="#242424", bg_color="#242424", text_color="white", button_color="#263d76", title_color="white")
-
+        nova_janela.destroy()
 def limpar_resultado():
     resultado_label.configure(text="")
 
 def sair():
     janela.destroy()
 
-# Criar uma janela
 janela = customtkinter.CTk()
 janela.title("CALCULADORA DE IMC")
 janela.geometry("650x250")
